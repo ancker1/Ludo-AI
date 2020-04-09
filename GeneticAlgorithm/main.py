@@ -2,27 +2,34 @@ import sys
 sys.path.append('../../pyludo/')
 from pyludo.utils import token_vulnerability, star_jump, will_send_self_home, will_send_opponent_home, is_globe_pos
 from pyludo import LudoGame
-from platers import LudoPlayerRandom
+from static_players import LudoPlayerRandom
+from players import GAPopulation, GAIndividual
 import random
 import time
 import numpy as np
+from tqdm import tqdm
 
-players = [ LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom() ]
+population = GAPopulation()
+population.evaulate_fitness_against_pop()
+best_chromosome = population.get_best_chromosome()
+
+
+agent = GAIndividual()
+agent.load_chromosome(best_chromosome)
+print(best_chromosome)
+players = [ agent, LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom() ]
 
 for i, player in enumerate(players):
     player.id = i
 
 wins = [0, 0, 0, 0]
-
-N = 100
+N = 1000
 start_time = time.time()
-for i in range(N):
+for i in tqdm(range(N)):
     random.shuffle(players)
     ludoGame = LudoGame(players)
     winner = ludoGame.play_full_game()
     wins[players[winner].id] += 1
-    if i % 100 == 0:
-        print('Game ', i, ' done')
 duration = time.time() - start_time
 
 print('win distribution:', wins)
