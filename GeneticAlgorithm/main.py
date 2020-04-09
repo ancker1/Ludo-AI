@@ -3,7 +3,9 @@ sys.path.append('../../pyludo/')
 from pyludo.utils import token_vulnerability, star_jump, will_send_self_home, will_send_opponent_home, is_globe_pos
 from pyludo import LudoGame
 from static_players import LudoPlayerRandom
-from players import GAPopulation, GAIndividual
+from population import GAPopulation
+from individual import GAIndividual
+from selection import rank_selection
 import random
 import time
 import numpy as np
@@ -12,6 +14,7 @@ from tqdm import tqdm
 population = GAPopulation()
 population.evaulate_fitness_against_pop()
 best_chromosome = population.get_best_chromosome()
+rank_selection(population, 10)
 
 
 agent = GAIndividual()
