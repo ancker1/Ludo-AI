@@ -1,0 +1,29 @@
+import sys
+sys.path.append('../../pyludo/')
+from pyludo.utils import token_vulnerability, star_jump, will_send_self_home, will_send_opponent_home, is_globe_pos
+from pyludo import LudoGame
+from platers import LudoPlayerRandom
+import random
+import time
+import numpy as np
+
+players = [ LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom() ]
+
+for i, player in enumerate(players):
+    player.id = i
+
+wins = [0, 0, 0, 0]
+
+N = 100
+start_time = time.time()
+for i in range(N):
+    random.shuffle(players)
+    ludoGame = LudoGame(players)
+    winner = ludoGame.play_full_game()
+    wins[players[winner].id] += 1
+    if i % 100 == 0:
+        print('Game ', i, ' done')
+duration = time.time() - start_time
+
+print('win distribution:', wins)
+print('games per second:', N / duration)
