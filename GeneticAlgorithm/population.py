@@ -8,12 +8,15 @@ class GAPopulation:
     """ Genetic Algorithm: Population """
     name = 'Population'
     
-    def __init__(self):
-        self.population_size = 20
+    def __init__(self, population_size = 100):
+        self.population_size = population_size
         self.evaluations_per_chromosome = 25
         self.individual = GAIndividual()
         self.init_pop()
         self.fitness = [0] * self.population_size
+
+    def load_chromosomes(self, chromosomes):
+        self.population = chromosomes
 
     def normalize(self, type_range = 0):
         """ Normalize genes into range
@@ -30,7 +33,7 @@ class GAPopulation:
             Genes are afterwards normalized into a range of [0, 1]."""
         genes = np.random.randn( self.population_size * self.individual.gene_count )
         self.population = genes.reshape((self.population_size, -1))
-        print(self.population)
+        #print(self.population)
 
     def evaluate_fitness_against_random(self):
         """ Evaluate fitness of population - with evaluation against RANDOM """
@@ -58,3 +61,6 @@ class GAPopulation:
 
     def get_best_chromosome(self):
         return self.population[np.argmax(self.fitness)]
+
+    def get_chromosomes(self):
+        return self.population

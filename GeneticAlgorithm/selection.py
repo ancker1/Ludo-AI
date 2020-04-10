@@ -14,8 +14,6 @@ def rank_selection(population : GAPopulation, pair_count, use_ranking = False):
         probabilities[sorted_fitness[i]] = (population.population_size - i) / total if use_ranking else population.fitness[sorted_fitness[i]] / total
     for _ in range(pair_count):
         pairs.append(np.random.choice(range(population.population_size), 2, p = probabilities))
-    print(pairs)
-    print(population.fitness)
     return pairs # return pair_count pairs
         
 # implement tournament

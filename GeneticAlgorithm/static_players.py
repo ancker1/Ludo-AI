@@ -8,3 +8,4 @@ class LudoPlayerRandom:
     @staticmethod
     def play(state, dice_roll, next_states):
         return random.choice(np.argwhere(next_states != False))
+
