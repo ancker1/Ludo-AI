@@ -46,3 +46,69 @@ class GAIndividual:
     def play(self, state, dice_roll, next_states):
         """ Return action that evaluated to max value """
         return self.evaluate_actions(state, next_states)
+
+
+class GANNIndividual:
+    """
+    Genetic Algorithm: Individual (X genes, value encoding)
+    """
+    name = 'NN Individual'
+
+    input_size  = 4 * 4 # 4 tokens per player
+    output_size = 4     # only 4 actions
+    hidden_neurons = 20 # 20 hidden neurons
+    gene_count = hidden_neurons * input_size + hidden_neurons + hidden_neurons * output_size + output_size
+
+    def __init__(self):
+        self.hidden_neurons = 20
+        self.input_size     = 4 * 4
+        self.output_size    = 4
+
+        self.W1 = np.zeros((self.hidden_neurons, self.input_size))
+        self.b1 = np.zeros((self.hidden_neurons, 1))
+        self.W2 = np.zeros((self.output_size, self.hidden_neurons))
+        self.b2 = np.zeros((self.output_size, 1))
+            
+    
+
+    def load_chromosome(self, chromosome):
+        """
+        Chromosome contains weights for NN
+        """
+        self.chromosome = chromosome
+        w1_siz = self.hidden_neurons*self.input_size
+        w2_siz = self.output_size*self.hidden_neurons
+        self.W1 = self.chromosome[0 : w1_siz].reshape((self.hidden_neurons, self.input_size))
+        self.W2 = self.chromosome[w1_siz : w1_siz + w2_siz].reshape((self.output_size, self.hidden_neurons))
+        self.b1 = self.chromosome[w1_siz + w2_siz : w1_siz + w2_siz + self.hidden_neurons].reshape((self.hidden_neurons, 1))
+        self.b2 = self.chromosome[w1_siz + w2_siz + self.hidden_neurons : w1_siz + w2_siz + self.hidden_neurons + self.output_size].reshape((self.output_size, 1))
+
+
+    # tanh
+    @staticmethod
+    def tanh(x):
+        return np.tanh(x)
+    # softmax
+    @staticmethod
+    def softmax(x):
+        return x
+
+    def forward(self, chromosome, state):
+        net_input = np.ravel(state)
+        activation = np.dot(self.W1, net_input) + self.b1
+        activation = self.tanh(activation)
+
+        output = np.dot(self.W2, activation) + self.b2
+        #output = softmax(output)
+        return output
+        
+
+    def evaluate_actions(self, state, next_states):
+        action_values = forward(self.chromosome, state)
+        action_values[next_states == False] = -1e6
+        return np.argmax(action_values)
+
+    def play(self, state, dice_roll, next_states):
+        """ Return action that evaluated to max value """
+        return self.evaluate_actions(state, next_states)
+    

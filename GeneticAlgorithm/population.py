@@ -11,7 +11,8 @@ class GAPopulation:
     def __init__(self, population_size = 100):
         self.population_size = population_size
         self.evaluations_per_chromosome = 25
-        self.individual = GAIndividual()
+        self.individual_type = GAIndividual
+        self.individual = self.individual_type()
         self.init_pop()
         self.fitness = [0] * self.population_size
 
@@ -47,7 +48,7 @@ class GAPopulation:
         """ Evaluate fitness of population - with evaluation against AGENTS """
         self.fitness    = [0] * self.population_size  # Reset fitness
         evaluations     = [0] * self.population_size
-        agents = [GAIndividual(), GAIndividual(), GAIndividual(), GAIndividual()]
+        agents = [self.individual_type(), self.individual_type(), self.individual_type(), self.individual_type()]
         for _ in tqdm(range(self.population_size * self.evaluations_per_chromosome)):
             sample = [random.randint(0,self.population_size - 1) for _ in range(4)] # sample random chromosomes
             for i in range(len(sample)):
