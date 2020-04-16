@@ -1,5 +1,5 @@
 import sys
-sys.path.append('../../pyludo/')
+sys.path.append('../../pyludoperf/')
 from pyludo import LudoGame
 from static_players import LudoPlayerRandom
 import random

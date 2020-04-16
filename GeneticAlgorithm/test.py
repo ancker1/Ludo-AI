@@ -2,21 +2,31 @@ import sys
 sys.path.append('../../pyludo/')
 from static_players import LudoPlayerRandom
 from population import GAPopulation
-from individual import GAIndividual
+from individual import GAIndividual, GANNIndividual
 from pyludo import LudoGame
 from tqdm import tqdm
 import numpy as np
+import argparse
 import random
 import time
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--individual',     type=int,   default = 0     )
+parser.add_argument('--generation',     type=int,   default = 0     )
+args = parser.parse_args()
 
-population = GAPopulation()
-chromosomes = np.load("data/gen10.npy")
+if args.individual == 0:
+    typ = GAIndividual
+else:
+    typ = GANNIndividual
+
+population = GAPopulation(typ)
+chromosomes = np.load("data/gen{}.npy".format(str(args.generation)))
 population.load_chromosomes(chromosomes)
 population.evaulate_fitness_against_pop()
 best_chromosome = population.get_best_chromosome()
 
-agent = GAIndividual()
+agent = typ()#GAIndividual()
 agent.load_chromosome(best_chromosome)
 print(best_chromosome)
 players = [ agent, agent, LudoPlayerRandom(), LudoPlayerRandom() ]

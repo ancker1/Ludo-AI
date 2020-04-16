@@ -1,23 +1,26 @@
-from individual import GAIndividual
+from individual import GAIndividual, GANNIndividual
 import numpy as np
 import copy
 
-def uniform_crossover(parents):
+def uniform_crossover(parents, individual_type = GAIndividual):
     """ 
     Uniform crossover
     """
-    mask = np.random.uniform(size=GAIndividual.gene_count) < 0.5
+    mask = np.random.uniform(size=individual_type.gene_count) < 0.5
     offspring = copy.deepcopy(parents)
     offspring[0][mask] = parents[1][mask]
     offspring[1][mask] = parents[0][mask]
     return offspring
 
-def normal_mutation(chromosome, sigma = 0.1):
+def normal_mutation(chromosome, individual_type = GAIndividual, sigma = 1, mutate_all = True):
     """
     Mutates random genes chosen from uniform dist.
     - Adds number from std.normal dist to gene.
     - sigma: standard deviation
     """
-    mask = np.random.uniform(size=GAIndividual.gene_count) < 0.5 # which genes to manipulate
-    chromosome[mask] += sigma * np.random.randn( GAIndividual.gene_count )[mask]
+    if mutate_all:
+        mask = [True] * individual_type.gene_count
+    else:
+        mask = np.random.uniform(size=individual_type.gene_count) < 0.5 # which genes to manipulate
+    chromosome[mask] += sigma * np.random.randn( individual_type.gene_count )[mask]
     return chromosome

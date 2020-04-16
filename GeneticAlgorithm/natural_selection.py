@@ -1,5 +1,5 @@
 from population import GAPopulation
-from individual import GAIndividual
+from individual import GAIndividual, GANNIndividual
 from recombination import uniform_crossover, normal_mutation
 from selection import rank_selection
 from replacement import elitism
@@ -9,12 +9,17 @@ import argparse
 
 
 class Evolution:
-    def __init__(self):
+    def __init__(self, mutation_rate, type_index):
+        if type_index == 0:
+            self.individual_type = GAIndividual
+        else:
+            self.individual_type = GANNIndividual
+
         self.selection          = rank_selection
         self.genetic_operator   = uniform_crossover
         self.mutator            = normal_mutation
         self.replacement        = elitism
-        self.pc = 0.05 # probability of mutation
+        self.pc = mutation_rate # probability of mutation
         self.generation_count   = 0
 
     def recombination(self, pairs, chromosomes):
@@ -23,10 +28,10 @@ class Evolution:
 
     def mutation(self, offspring):
         mask = np.random.uniform(size = len(offspring)) < self.pc
-        return [self.mutator(offspring[i]) if mask[i] else offspring[i] for i in range(len(offspring))]
+        return [self.mutator(offspring[i], individual_type=self.individual_type) if mask[i] else offspring[i] for i in range(len(offspring))]
 
     def crossover(self, pairs, chromosomes):
-        offspring = np.array([self.genetic_operator([chromosomes[parents[0]], chromosomes[parents[1]]]) for parents in pairs])
+        offspring = np.array([self.genetic_operator([chromosomes[parents[0]], chromosomes[parents[1]]], individual_type=self.individual_type) for parents in pairs])
         return offspring.reshape(len(pairs)*2, -1) # flatten from [[child_1, child_2],...] to [child_1, child_2, ....]
 
     def save_population(self, chromosomes):
@@ -36,15 +41,17 @@ class Evolution:
 
 ## READ ARGS
 parser = argparse.ArgumentParser()
-parser.add_argument('--offsprings',  type=float, default=0.8) # read by: args.offsprings
-parser.add_argument('--generations', type=int, default=10)
-parser.add_argument('--elitism',     type=float, default=0.2)
+parser.add_argument('--offsprings',     type=float, default = 0.8   ) # read by: args.offsprings
+parser.add_argument('--generations',    type=int,   default = 10    )
+parser.add_argument('--elitism',        type=float, default = 0.2   )
+parser.add_argument('--mutation_rate',  type=float, default = 1     )
+parser.add_argument('--individual',     type=int,   default = 0     )
 args = parser.parse_args()
 
 if __name__ == "__main__":
-    evolution = Evolution()
+    evolution = Evolution(args.mutation_rate, args.individual)
 
-    population = GAPopulation()
+    population = GAPopulation( evolution.individual_type )
     population.evaulate_fitness_against_pop()
     evolution.save_population(population.get_chromosomes())
 
