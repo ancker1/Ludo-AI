@@ -21,4 +21,4 @@ Win rates against random player
 Win rates against semi-smart player
 
 ## Ludo Game
-The used Lydo game is from .. link ..
+The used Ludo game is from .. link ..
