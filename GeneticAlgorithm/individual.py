@@ -104,7 +104,7 @@ class GANNIndividual:
 
     def forward(self, state):
 
-        temp_input = np.append(self.translate(state.state), 1)
+        temp_input = np.append(self.translate(state.state), 1) # append '1' for bias
         net_input = np.ravel(temp_input).reshape((self.input_size, 1))
 
         activation = self.W1 @ net_input
@@ -123,11 +123,6 @@ class GANNIndividual:
                 action_values[i] = -100
             else:
                 action_values[i] = self.forward(next_state)
-        #action_values = self.forward(state, dice_roll)
-        #for i in range(4):
-        #    if next_states[i] is False:
-        #        action_values[i] = -100
-        #print(action_values)
         return np.argmax(action_values)
 
     def play(self, state, dice_roll, next_states):
