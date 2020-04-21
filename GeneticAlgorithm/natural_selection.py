@@ -20,7 +20,7 @@ class Evolution:
         self.mutator            = normal_mutation
         self.replacement        = elitism
         self.pc = mutation_rate # probability of mutation
-        self.generation_count   = 0
+        self.generation_count   = 0 # set to 0 ------------
 
     def recombination(self, pairs, chromosomes):
         offspring = self.crossover(pairs, chromosomes)
@@ -34,8 +34,11 @@ class Evolution:
         offspring = np.array([self.genetic_operator([chromosomes[parents[0]], chromosomes[parents[1]]], individual_type=self.individual_type) for parents in pairs])
         return offspring.reshape(len(pairs)*2, -1) # flatten from [[child_1, child_2],...] to [child_1, child_2, ....]
 
-    def save_population(self, chromosomes):
-        filepath = "data/gen{}.npy".format(str(self.generation_count))
+    def save_population(self, chromosomes, adjust=0):
+        if adjust == 0:
+            filepath = "data/gen{}.npy".format(str(self.generation_count))
+        else:
+            filepath = "adjust/gen{}.npy".format(str(self.generation_count))
         np.save(filepath, population.get_chromosomes())
 
 
@@ -46,14 +49,20 @@ parser.add_argument('--generations',    type=int,   default = 10    )
 parser.add_argument('--elitism',        type=float, default = 0.2   )
 parser.add_argument('--mutation_rate',  type=float, default = 1     )
 parser.add_argument('--individual',     type=int,   default = 0     )
+parser.add_argument('--adjust',         type=int,   default = 0     ) # Used to indicate if it an adjustment process
 args = parser.parse_args()
 
 if __name__ == "__main__":
     evolution = Evolution(args.mutation_rate, args.individual)
 
-    population = GAPopulation( evolution.individual_type )
-    population.evaulate_fitness_against_pop()
-    evolution.save_population(population.get_chromosomes())
+    population = GAPopulation( evolution.individual_type, adjust=args.adjust )
+    if args.adjust != 0:
+        chromosomes = np.load("data/gen310.npy")
+        population.load_chromosomes(chromosomes)
+        population.shrink_population()
+    population.evaluate_fitness()
+
+    evolution.save_population(population.get_chromosomes(), adjust=args.adjust)
 
     while evolution.generation_count < args.generations:
         print("Current best fitness")
@@ -65,11 +74,11 @@ if __name__ == "__main__":
         # Replacement to generate new population
         evolution.replacement(population, offspring, n_best=int(args.elitism*population.population_size))
         # Evaluate fitness for new population
-        population.evaulate_fitness_against_pop()
+        population.evaluate_fitness()
         # Increment generation count
         evolution.generation_count += 1
         # Save the new population
-        evolution.save_population(population.get_chromosomes())
+        evolution.save_population(population.get_chromosomes(), adjust=args.adjust)
 
 # load databy: np.load("gen{}.npy".format(generation_index))
     

@@ -8,16 +8,18 @@ class GAPopulation:
     """ Genetic Algorithm: Population """
     name = 'Population'
     
-    def __init__(self, individual_type, population_size = 100):
-        self.population_size = population_size
+    def __init__(self, individual_type, adjust=0, population_size = 100, adjust_size=20):
+        self.adjust             = adjust
+        self.adjust_size        = adjust_size
+        self.population_size    = population_size
         self.evaluations_per_chromosome = 25
 
-        self.individual_type = individual_type
+        self.individual_type    = individual_type
+        self.individual         = self.individual_type()
+        self.fitness            = [0] * self.population_size
 
-        self.individual = self.individual_type()
         self.init_pop()
         self.normalize()
-        self.fitness = [0] * self.population_size
 
     def load_chromosomes(self, chromosomes):
         self.population = chromosomes
@@ -43,14 +45,30 @@ class GAPopulation:
         self.population = genes.reshape((self.population_size, -1))
         #print(self.population)
 
+    def shrink_population(self):
+        # Requires population with loaded chromosomes with fitness against pop.
+        self.evaulate_fitness_against_pop()
+        print("Before shrink:",self.population.shape)
+        self.population = self.population[np.argsort(self.fitness)[::-1][:self.adjust_size]]
+        print("After shrink:",self.population.shape)
+        self.population_size = self.adjust_size
+        self.fitness         = [0] * self.population_size
+
+    def evaluate_fitness(self):
+        if self.individual_type == GAIndividual:
+            self.normalize() # Normalize before evaluating
+
+        if self.adjust == 0:
+            self.evaulate_fitness_against_pop()
+        else:
+            self.evaluate_fitness_against_random()
+
     def evaluate_fitness_against_random(self):
         """ Evaluate fitness of population - with evaluation against RANDOM """
         #self.normalize() # Normalize before evaluating
-
-        for i, chromosome in enumerate(self.population):
-            print('Fitness: '+str(i))
-            self.individual.load_chromosome(chromosome)
-            self.fitness[i] = evaluate_agent(self.individual, 100)
+        for i in tqdm(range(self.population_size)):
+            self.individual.load_chromosome(self.population[i])
+            self.fitness[i] = evaluate_agent(self.individual, self.evaluations_per_chromosome * 4) / (self.evaluations_per_chromosome * 4)
         print(self.fitness)
 
     def evaulate_fitness_against_pop(self):

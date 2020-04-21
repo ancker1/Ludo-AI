@@ -120,7 +120,7 @@ class GANNIndividual:
         action_values = np.zeros(4)
         for i, next_state in enumerate(next_states):
             if next_state is False:
-                action_values[i] = -100
+                action_values[i] = -10000000
             else:
                 action_values[i] = self.forward(next_state)
         return np.argmax(action_values)

@@ -16,7 +16,7 @@ The following methods have been implemented:
 Win rates against random player
 | Q-Learning        | GA (4-bit state-action)    | GA with NN  |
 | ------------- |:-------------:| -----:|
-| 0.60      | 0.779 | 0. |
+| 0.60      | 0.779 | 0.922 |
 
 Win rates against semi-smart player
 
