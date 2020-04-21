@@ -1,7 +1,7 @@
 import sys
 sys.path.append('../../pyludoperf/')
 from individual import GAIndividual, GANNIndividual
-from fast_static_players import LudoPlayerRandom
+from fast_static_players import LudoPlayerRandom, SemiSmartPlayer
 from population import GAPopulation
 from pyludo import LudoGame
 from tqdm import tqdm
@@ -20,8 +20,8 @@ population = GAPopulation(typ, population_size=100)
 chromosomes = np.load("data/gen100.npy")
 population.load_chromosomes(chromosomes)
 
-#population.evaluate_fitness_against_random()
-population.evaulate_fitness_against_pop()
+population.evaluate_fitness_against_random()
+#population.evaulate_fitness_against_pop()
 
 scores = []
 
@@ -38,7 +38,7 @@ for i, player in enumerate(players):
 
 N = 1000
 
-for i in range(30):
+for j in range(30):
     wins = [0, 0, 0, 0]
     start_time = time.time()
     for i in tqdm(range(N)):
@@ -47,6 +47,7 @@ for i in range(30):
         winner = ludoGame.play_full_game()
         wins[players[winner].id] += 1
     duration = time.time() - start_time
+    print('Game: '+str(j)+'/30')
     print(wins[1])
     scores.append(wins[1])
     
@@ -56,7 +57,7 @@ print('games per second:', N / duration)
 
 print(scores)
 scores = np.array(scores)
-np.savetxt("analyze/GASimple_vs_random.txt", scores)
+np.savetxt("analyze/GASimple_vs_semismart.txt", scores)
 
 #current_generation += 10
 

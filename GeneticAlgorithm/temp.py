@@ -12,7 +12,7 @@ import numpy as np
 
 #np.savetxt("analyze/test.txt",x)
 
-x = np.loadtxt("analyze/GANN_vs_random_adjust.txt")
+x = np.loadtxt("analyze/GASimple_vs_random_adjust.txt") / 1000
 print(x)
 
 print(np.mean(x))
