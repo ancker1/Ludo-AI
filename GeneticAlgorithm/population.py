@@ -63,6 +63,13 @@ class GAPopulation:
         else:
             self.evaluate_fitness_against_random()
 
+    def evaluate_fitness_against_specific(self, use_random):
+        #self.normalize() # Normalize before evaluating
+        for i in tqdm(range(self.population_size)):
+            self.individual.load_chromosome(self.population[i])
+            self.fitness[i] = evaluate_agent(self.individual, self.evaluations_per_chromosome * 4, use_random=use_random) / (self.evaluations_per_chromosome * 4)
+        print(self.fitness)
+
     def evaluate_fitness_against_random(self):
         """ Evaluate fitness of population - with evaluation against RANDOM """
         #self.normalize() # Normalize before evaluating

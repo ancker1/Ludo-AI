@@ -37,23 +37,26 @@ fig2, axs = plt.subplots(2,2)
 axs[0,0].plot(gens, gene_means[:,0])
 axs[0,0].fill_between(gens, gene_means[:,0] - gene_stds[:,0], gene_means[:,0] + gene_stds[:,0], color="#7ff58f", alpha=0.6)
 #axs[0,0].xlabel('Generation')
-axs[0,0].set_ylabel(r'$\omega_0$')
+axs[0,0].set_ylabel(r'$\omega_0$', fontsize = 16)
+axs[0,0].grid()
 
 axs[0,1].plot(gens, gene_means[:,1])
 axs[0,1].fill_between(gens, gene_means[:,1] - gene_stds[:,1], gene_means[:,1] + gene_stds[:,1], color="#7ff58f", alpha=0.6)
 #axs[0,1].xlabel('Generation')
-axs[0,1].set_ylabel(r'$\omega_1$')
+axs[0,1].set_ylabel(r'$\omega_1$', fontsize = 16)
+axs[0,1].grid()
 
 axs[1,0].plot(gens, gene_means[:,2])
 axs[1,0].fill_between(gens, gene_means[:,2] - gene_stds[:,2], gene_means[:,2] + gene_stds[:,2], color="#7ff58f", alpha=0.6)
-axs[1,0].set_xlabel('Generation')
-axs[1,0].set_ylabel(r'$\omega_2$')
+axs[1,0].set_xlabel('Generation', fontsize = 16)
+axs[1,0].set_ylabel(r'$\omega_2$', fontsize = 16)
+axs[1,0].grid()
 
 axs[1,1].plot(gens, gene_means[:,3])
 axs[1,1].fill_between(gens, gene_means[:,3] - gene_stds[:,3], gene_means[:,3] + gene_stds[:,3], color="#7ff58f", alpha=0.6)
-axs[1,1].set_xlabel('Generation')
-axs[1,1].set_ylabel(r'$\omega_3$')
-
+axs[1,1].set_xlabel('Generation', fontsize = 16)
+axs[1,1].set_ylabel(r'$\omega_3$', fontsize = 16)
+axs[1,1].grid()
 #print(all_chromosomes[0])
 fig2 = plt.figure(2)
 incrementer = 1 / len(all_chromosomes)
@@ -62,13 +65,13 @@ for generation in all_chromosomes:
     #print(generation[:,0])
     color = cm.viridis(index)
     index += incrementer
-    plt.scatter(generation[:,0], generation[:,1], c=color, s = 1)
+    plt.scatter(generation[:,0], generation[:,1], c=color, s = 5)
 cbar = plt.colorbar()
 cbar.ax.get_yaxis().set_ticks([])
 for i in range(10):
     cbar.ax.text(1.5, (i + 1)*.098, str(int(N_GENERATIONS* ((i + 1)*.1))))
-plt.xlabel(r'$\omega_0$')
-plt.ylabel(r'$\omega_1$')
+plt.xlabel(r'$\omega_0$', fontsize = 16)
+plt.ylabel(r'$\omega_1$', fontsize = 16)
 
 fig3 = plt.figure(3)
 incrementer = 1 / len(all_chromosomes)
@@ -77,14 +80,15 @@ for generation in all_chromosomes:
     #print(generation[:,0])
     color = cm.viridis(index)
     index += incrementer
-    plt.scatter(generation[:,2], generation[:,3], c=color, s = 1)
+    plt.scatter(generation[:,2], generation[:,3], c=color, s = 5)
     print(index)
 cbar = plt.colorbar()
 cbar.ax.get_yaxis().set_ticks([])
 for i in range(10):
     cbar.ax.text(1.5, (i + 1)*.098, str(int(N_GENERATIONS* ((i + 1)*.1))))
-plt.xlabel(r'$\omega_2$')
-plt.ylabel(r'$\omega_3$')
+plt.xlabel(r'$\omega_2$', fontsize = 16)
+plt.ylabel(r'$\omega_3$', fontsize = 16)
 
 plt.show()
     
+
