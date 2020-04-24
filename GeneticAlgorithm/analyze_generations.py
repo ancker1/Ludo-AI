@@ -24,7 +24,7 @@ else:
     typ = GANNIndividual
     generation_max = 312
     pathprefix = "GANN"
-    incrementer = 2
+    incrementer = 1
 
 agent = typ()
 evalplayer = LudoPlayerRandom()
@@ -34,22 +34,28 @@ for i, player in enumerate(players):
     player.id = i
 
 N = 1000
-scores = []
-for k in range(1):
-    for j in range(generation_max):
-        chromosome = np.load("GASimple/best_chromosomes/gen{}.npy".format(str(j)))
-        agent.load_chromosome(chromosome)
+
+current_generation = 0
+while current_generation < generation_max:
+    chromosome = np.load(pathprefix+"/best_chromosomes/gen{}.npy".format(str(current_generation)))
+    agent.load_chromosome(chromosome)
+    scores = []
+    print('Evaluating gen: '+str(current_generation)+'/'+str(generation_max))
+    for i in tqdm(range(10)):
         wins = [0, 0, 0, 0]
-        for i in tqdm(range(N)):
+        for i in range(N):
             random.shuffle(players)
             ludoGame = LudoGame(players)
             winner = ludoGame.play_full_game()
             wins[players[winner].id] += 1
-        print('Chromosome: '+str(j)+'/100')
         scores.append(wins[1])
+    np.savetxt(pathprefix+"/generational_winrates/gen{}.txt".format(str(current_generation)), scores)
+    if current_generation == 20:
+        incrementer = 5 # analyze all up to gen 20 - hereafter only every fifth.
+    current_generation += incrementer
 
-scores = np.array(scores)
-np.savetxt(pathprefix+"/gen_vs_random.txt", scores)
+#scores = np.array(scores)
+#np.savetxt(pathprefix+"/gen_vs_random.txt", scores)
 
 
 

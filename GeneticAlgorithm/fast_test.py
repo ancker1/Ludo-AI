@@ -31,14 +31,15 @@ args = parser.parse_args()
 #print(best_chromosome)
 
 evalplayer = LudoPlayerRandom()
-agent = SemiSmartPlayer()
-players = [ agent, agent, evalplayer, evalplayer ]
+agent = LudoPlayerRandom()
+players = [ LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom() ]
 
 for i, player in enumerate(players):
     player.id = i
 
 wins = [0, 0, 0, 0]
 N = 1000
+
 start_time = time.time()
 for i in tqdm(range(N)):
     random.shuffle(players)

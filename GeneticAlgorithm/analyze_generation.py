@@ -29,8 +29,9 @@ else:
 population = GAPopulation(typ, population_size=100)
 #chromosomes = np.load("data/gen100.npy")
 
-current_generation = 0
+current_generation = 1
 while current_generation < generation_max:
+    print(str(current_generation)+"/"+str(generation_max))
     chromosomes = np.load(pathprefix+"/data/gen{}.npy".format(str(current_generation)))
     population.load_chromosomes(chromosomes)
     population.evaulate_fitness_against_pop()
@@ -38,6 +39,7 @@ while current_generation < generation_max:
     filepath = pathprefix+"/best_chromosomes/gen{}.npy".format(str(current_generation))
     np.save(filepath, best_chromosome)
     current_generation += incrementer 
+
 
 #population.evaluate_fitness_against_specific(use_random=False)
 #population.evaulate_fitness_against_pop()
