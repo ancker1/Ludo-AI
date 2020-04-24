@@ -2,12 +2,13 @@ import sys
 sys.path.append('../../pyludoperf/')
 from pyludo import LudoGame
 import numpy as np
+import random
 
 class QSimple:
     """ Uses Q-Learning """
     name = 'Q-learner'
 
-    def __init__(self):
+    def __init__(self, standardMoveType = 0):
         self.alpha      = 0.1
         self.gamma      = 0.2
         self.epsilon    = 0.1
@@ -31,6 +32,13 @@ class QSimple:
         self.moves = 0
         # Exploit knowledge
         self.actGreedy = False
+        # Set Standard move
+        if standardMoveType == 0:
+            self.standardMove = self.moveClosestToGoal
+        elif standardMoveType == 1:
+            self.standardMove = self.moveRandom
+        else:
+            self.standardMove = self.moveResultingLargestStep
 
     def getState(self, state, next_states):
         self.stateBits = [0] * 4
@@ -54,7 +62,18 @@ class QSimple:
             self.state += self.stateMap[i] * bit
         return self.state
 
-    def standardMove(self, state, next_states):
+    def moveClosestToGoal(self, state, next_states):
+        sortedChoices = np.argsort(state.state[0])[::-1]
+        for i in range(4):
+            if next_states[sortedChoices[i]] is not False:
+                return sortedChoices[i]
+
+    def moveRandom(self, state, next_states):
+        for num in random.sample(list(range(4)), 4):
+            if next_states[num] is not False:
+                return num
+
+    def moveResultingLargestStep(self, state, next_states):
         # Move token that leads to largest step
         max_indice = 0
         max_step   = -2000

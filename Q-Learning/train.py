@@ -9,10 +9,13 @@ from os import path
 import numpy as np
 import sg_filter
 import random
-import csv
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--movetype',     type=int,   default = 0)
+args = parser.parse_args()
 
-agent = QSimple()
+agent = QSimple(standardMoveType=args.movetype)
 evaluator = LudoPlayerRandom()
 players = [ agent, LudoPlayerRandom(), LudoPlayerRandom(), LudoPlayerRandom() ]
 
@@ -31,8 +34,8 @@ for i in tqdm(range(N)):
     rewards.append(agent.accumulatedReward)
     agent.accumulatedReward = 0
 
-print(wins)
-#np.savetxt("QSimple/Q.txt", agent.Q)
+print(wins[0] / N)
+np.savetxt("QSimple/Q.txt", agent.Q)
 plt.plot(rewards, alpha=.2)
 plt.plot(sg_filter.savitzky_golay(np.array(rewards), 31, 3))
 plt.xlabel('Episodes', fontsize=16)
