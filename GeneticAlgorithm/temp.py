@@ -13,22 +13,21 @@ import sg_filter
 
 #np.savetxt("analyze/test.txt",x)
 
-x = np.loadtxt("../Evaluation/GASimple_vs_QLearner.txt") / 1000
+x = np.loadtxt("../Evaluation/QSimple_vs_GANN.txt") / 10
 #x = np.loadtxt("GASimple/gen_vs_random.txt") / 1000
 print(x)
-
 print(np.mean(x))
 print(np.std(x))
 
 
-y = np.loadtxt("GASimple/gen_vs_random.txt") / 10
-gens = range(len(y))
+#y = np.loadtxt("GASimple/gen_vs_random.txt") / 10
+#gens = range(len(y))
 
-fig1 = plt.figure(1)
-plt.plot(gens, y, alpha=.3)
-plt.plot(sg_filter.savitzky_golay(np.array(y), 15, 3))
-plt.grid()
+#fig1 = plt.figure(1)
+#plt.plot(gens, y, alpha=.3)
+#plt.plot(sg_filter.savitzky_golay(np.array(y), 15, 3))
+#plt.grid()
 #plt.legend(['Win rate','Running mean(15)'])
-plt.xlabel('Generation', fontsize=16)
-plt.ylabel('Win rate [%]', fontsize=16)
-plt.show()
+#plt.xlabel('Generation', fontsize=16)
+#plt.ylabel('Win rate [%]', fontsize=16)
+#plt.show()

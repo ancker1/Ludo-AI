@@ -2,7 +2,7 @@ import numpy as np
 
 class GAIndividual:
     """ Genetic Algorithm: Individual (4 genes, value encoding) """
-    name = 'Individual'
+    name = 'GA Simple'
 
     gene_count = 4
 
@@ -52,7 +52,7 @@ class GANNIndividual:
     """
     Genetic Algorithm: Individual (X genes, value encoding)
     """
-    name = 'NN Individual'
+    name = 'GA NN'
 
     input_size  = 4 * 59 + 1 # 4 tokens per player & bias
     output_size = 4          # only 4 actions

@@ -3,7 +3,7 @@ import random
 
 class LudoPlayerRandom:
     """ takes a random valid action """
-    name = 'random'
+    name = 'Random'
 
     @staticmethod
     def play(state, dice_roll, next_states):
@@ -13,7 +13,7 @@ class LudoPlayerRandom:
 
 class SemiSmartPlayer:
     """ Semi smart player that follows a static strategy """
-    name = 'semismart'
+    name = 'SemiSmart'
 
     def play(self, state, dice_roll, next_states):
         for i, nstate in enumerate(next_states):

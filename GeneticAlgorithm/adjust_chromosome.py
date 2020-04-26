@@ -1,1 +1,0 @@
-# Perform a narrow search -> Low population size. Evaluated versus random player.

@@ -34,7 +34,7 @@ while current_generation < generation_max:
     current_generation += incrementer
 
 plt.figure(figsize=(5,4))
-plt.scatter(x, y, alpha = 0.1)
+plt.scatter(x, y, alpha = 0.1, edgecolors='None')
 plt.plot(xmean,sg_filter.savitzky_golay(np.array(ymean), 15, 3), linewidth=3)
 plt.xlabel('Generation')
 plt.ylabel('Win rate [%]')
