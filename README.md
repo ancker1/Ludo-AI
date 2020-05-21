@@ -17,7 +17,7 @@ The following methods have been implemented:
 
 Win rates against random player
 | Advanced Q-learning | Simple Q-learning     | GA (4-bit state-action)    | GA evolving NN  |
-| -----------:|:------ |:-------------:| -----:|
+| :-----------:|:------: |:-------------:| :-----:|
 | 0.6567   | 0.8403  | 0.8118 | 0.9041 |
 
 More results against several player types are available in the report.
