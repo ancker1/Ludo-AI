@@ -4,7 +4,7 @@ import argparse
 import sg_filter
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--individual',     type=int,   default = 0     )
+parser.add_argument('--individual',     type=int,   default = 1     )
 args = parser.parse_args()
 
 if args.individual == 0:
@@ -38,6 +38,7 @@ plt.scatter(x, y, alpha = 0.1, edgecolors='None')
 plt.plot(xmean,sg_filter.savitzky_golay(np.array(ymean), 15, 3), linewidth=3)
 plt.xlabel('Generation')
 plt.ylabel('Win rate [%]')
+plt.grid()
 plt.show()
 
 #scores = np.array(scores)

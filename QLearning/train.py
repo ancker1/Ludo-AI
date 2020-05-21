@@ -36,6 +36,7 @@ for i in tqdm(range(N)):
 
 print(wins[0] / N)
 np.savetxt("QSimple/Q.txt", agent.Q)
+np.savetxt("QSimple/training/rewards.txt", rewards)
 plt.plot(rewards, alpha=.2)
 plt.plot(sg_filter.savitzky_golay(np.array(rewards), 31, 3))
 plt.xlabel('Episodes', fontsize=16)

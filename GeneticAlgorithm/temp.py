@@ -13,11 +13,15 @@ import sg_filter
 
 #np.savetxt("analyze/test.txt",x)
 
-x = np.loadtxt("../Evaluation/QSimple_vs_GANN.txt") / 10
+filename = "GARAS2_vs_GARAS.txt"
+
+x = np.loadtxt("../Evaluation/"+filename) / 10
 #x = np.loadtxt("GASimple/gen_vs_random.txt") / 1000
-print(x)
-print(np.mean(x))
-print(np.std(x))
+#print("Win rate, GARas: ",x)
+print("File: ",filename)
+print("Win rate, GA Ras: ",np.round(np.mean(x),decimals=2))
+print("Win rate, opp: ",np.round(100-np.mean(x),decimals=2))
+print("Std.: ",np.round(np.std(x),decimals=2))
 
 
 #y = np.loadtxt("GASimple/gen_vs_random.txt") / 10
