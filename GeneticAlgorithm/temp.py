@@ -13,7 +13,7 @@ import sg_filter
 
 #np.savetxt("analyze/test.txt",x)
 
-filename = "GARAS2_vs_GARAS.txt"
+filename = "GARAS3_vs_GARAS2.txt"
 
 x = np.loadtxt("../Evaluation/"+filename) / 10
 #x = np.loadtxt("GASimple/gen_vs_random.txt") / 1000

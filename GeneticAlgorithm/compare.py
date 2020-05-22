@@ -14,6 +14,7 @@ import csv
 from os import path
 from RasmusKuus.V1.GeneticAlgorithms import GeneticAlgorithmsClass
 from RasmusKuus.V2.GeneticAlgorithms import GeneticAlgorithmsClass2
+from RasmusKuus.V3.GeneticAlgorithms import GeneticAlgorithmsClass3
 
 def tanh(input):
     return np.tanh(input)
@@ -25,10 +26,65 @@ GA.importWeigths(0,"RasmusKuus/V1/Gen-14-Wins-503-57-3-57-1-weigths.npy")
 GA2 = GeneticAlgorithmsClass2(58,0,0,1,tanh,pops)
 GA2.importWeigths(0,"RasmusKuus/V2/Gen-16-Wins-72-58-0-0-1-weigths.npy")
 
+pops3 = 100
+GA3 = GeneticAlgorithmsClass3(60,0,0,1,tanh,pops3)
+GA3.importWeigths(0,"RasmusKuus/V3/Gen-1-Wins-910-60-0-0-1-weigths.npy")
+
+class GAPlayer3:
+    global GA3
+    name = 'GA Ras3'
+    index = 0
+    def getGameState(self,state):
+        output = np.zeros(59)
+        for i in range(4):
+            for j in range(4):
+                if i == 0:
+                    if (state[i][j] == 99):
+                        output[58] += 1
+                    elif state[i][j] == -1:
+                        output[0] += 1
+                    else:
+                        output[state[i][j]+1] += 1
+
+                        if output[state[i][j]+1] > 1 or state[i][j]%13 == 1 or state[i][j]%13 == 9:
+                            output[state[i][j]+1] += 1
+
+
+                if state[i][j] < 52 and state[i][j] != -1:
+                    output[state[i][j]+1] -= 1
+                  
+        return output
+    
+
+    def evaluate_actions(self,state, next_states, dice_roll):
+        action_values = np.zeros(4)
+        actions = 0
+        
+        for i, next_state in enumerate(next_states):
+            if next_state is False:
+                action_values[i] = -1
+            else:
+                actions += 1
+
+        if actions > 1:
+            stateSum = np.sum(state[0])
+            for i, next_state in enumerate(next_states):
+                if next_state is False:
+                    action_values[i] = -99999
+                else:
+                    dif = (np.sum(next_state.state[0] - stateSum))/56
+                    AiInput = np.append(self.getGameState(next_state.state),dif)
+                    action_values[i] = GA3.runModel(AiInput,GA3.getPopulation(self.index))
+
+        return np.argmax(action_values)
+
+    def play(self,state, dice_roll, next_states):
+        return self.evaluate_actions(state, next_states, dice_roll)
+
 class GAPlayer2:
     global GA2
     """ takes a random valid action """
-    name = 'GA RAS2'
+    name = 'GA Ras2'
     index = 0
     def getGameState(self,state):
         output = np.zeros(58)
@@ -140,15 +196,17 @@ if path.isfile("../QLearning/experience.csv"):
 #agentB.actGreedy = True
 #agentB.Q = np.loadtxt("../QLearning/QSimple/Q.txt")
 
-agentB = GAPlayer()
+#agentB = GAPlayer()
+
+agentB = GAPlayer2()
 
 #agentB = LudoPlayerRandom()
 
-agentA = GAPlayer2()
+agentA = GAPlayer3()
 
 
 
-savepath = "../Evaluation/GARAS2_vs_GARAS.txt"
+savepath = "../Evaluation/GARAS3_vs_GARAS2.txt"
 print("Will save at: "+savepath)
 
 players = [ agentA, agentA, agentB, agentB ]
