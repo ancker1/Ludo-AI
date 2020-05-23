@@ -1,8 +1,8 @@
 clc;clear;format compact;
-file = 'semismart_vs_random.txt';
+file = 'QLearner_vs_semismart.txt';
 disp(file)
 data = textread(file) ./ 1000;
-
+datatemp = data;
 x  = (data - mean(data)) / std(data); % std
 
 [h,p] = kstest(x);% Could not reject normality.´
@@ -12,7 +12,7 @@ else
     disp('Normality is rejected!')
 end
 mu0 = 0.50;
-[h,p] = ttest(data - mu0);
+[h,p] = ttest(datatemp - mu0);
 if h == 0
     disp('Results are insignificant')
 else
